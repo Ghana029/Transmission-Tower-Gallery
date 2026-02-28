@@ -1,0 +1,535 @@
+/* 基本設定 */
+body {
+    background-color: #000000; /* 鉄塔が映える黒 */
+    margin: 0;
+    color: rgb(172, 172, 172);
+    font-family: Agency FB;
+}
+
+
+/* タイルレイアウト (3列) */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    padding: 0.5px;
+}
+header h1 {
+    /* 1. 数値で指定（px） */
+    font-size: 20px; 
+
+    /* 2. もしくは画面幅に合わせる（vw）※鉄塔のように迫力を出したい場合 */
+    /* font-size: 8vw; */
+
+    /* 3. 余白や太さもここで調整できます */
+    letter-spacing: 0.2px; /* 文字の間隔を広げるとより哲学的な印象になります */
+    font-weight: 10;      /* 数字を小さくすると細いフォントになり、洗練されます */
+    margin: 0;           /* 外側の余白をゼロに */
+    line-height: 0.7;    /* 行の高さを文字サイズぴったりにする */
+    padding-bottom: 14px; /* 必要最低限の隙間だけ残す */
+}
+
+.grid-item {
+    overflow: hidden;
+    aspect-ratio: 1 / 1; /* 正方形に統一 */
+    cursor: pointer;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 枠いっぱいに収める */
+    transition: transform 0.3s ease;
+}
+
+.grid-item img:hover {
+    transform: scale(1.1); /* ホバーで少し拡大 */
+}
+
+/* モーダルの背景 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000; /* ボタン(10001)より一つ小さい数字にする */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.95); /* 鉄塔を際立たせるため少し濃く */
+    overflow: hidden; /* モーダル表示中は背景をスクロールさせない */
+}
+
+/* 拡大写真のスタイル */
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90vh; /* 画面内に収める */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: zoom 0.3s;
+}
+
+@keyframes zoom {
+    from {transform: translate(-50%, -50%) scale(0.7); opacity: 0;}
+    to {transform: translate(-50%, -50%) scale(1); opacity: 1;}
+}
+
+/* 閉じるボタン */
+/* 閉じるボタンの修正 */
+.close {
+    position: fixed;   /* 画面に対して固定 */
+    top: 20px;         /* 上から20px */
+    right: 25px;       /* 右から25px */
+    color: #fff;
+    font-size: 45px;   /* スマホでもタップしやすいよう少し大きく */
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10001;    /* 画像やモーダルよりも必ず上にくるように設定 */
+    line-height: 1;    /* 位置のズレを防止 */
+    
+    /* タップしやすくするための背景（必要に応じて） */
+    text-shadow: 0 0 10px rgba(0,0,0,0.8); /* 黒い影をつけて白飛び防止 */
+}
+/* ギャラリーの下に余白を作る */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 80px; /* フッターとの間の距離 */
+}
+
+/* フッターのスタイル */
+footer {
+    padding: 60px 20px;
+    border-top: 1px solid #333; /* 控えめな境界線 */
+    text-align: center;
+    background-color: #0d0d0d;
+}
+
+.footer-content p {
+    margin: 2px 0;
+    color: #666; /* 文字色は暗めにして主役の写真を邪魔しない */
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.footer-sub {
+    font-style: italic;
+    opacity: 1;
+}
+/* 画面幅が600px以下のとき（主にスマートフォン）のスタイル */
+@media (max-width: 600px) {
+    @media (max-width: 600px) {
+    .grid-container {
+        /* 横に3つ、均等な幅で並べる設定 */
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); 
+        
+        /* スマホで3枚並べると1枚が小さくなるため、隙間は狭め（2px〜5px）がおすすめ */
+        gap: 3px; 
+        padding: 5px;
+    }
+
+    /* 3枚並びだと1枚が小さいため、タイトルの余白なども少し詰める */
+    header {
+        padding: 1.5rem 1rem;
+    }
+}
+    header h1 {
+        /* 現在 3rem や 1.8rem なら、1.2rem 〜 1.5rem 程度まで小さくします */
+        font-size: -500rem; 
+        
+        /* 以前より文字を小さくしたので、レタースペーシングを少し広げると
+           「鉄塔の図面」のような繊細でオシャレな印象になります */
+        letter-spacing: -100000000em; 
+        font-weight: 9000;
+        
+        /* 上下の余白もギュッと詰めて、すぐに写真が見えるようにします */
+        margin-top: 10px;
+        margin-bottom: 5px;
+        
+        /* モーションの基点を再確認（もしズレていれば） */
+        transform-origin: bottom; 
+    }
+
+    header {
+        /* ヘッダー自体の余白も小さくして、ギャラリーまでの距離を縮めます */
+        padding: 20px 0 10px 0;
+    }
+
+
+    /* モーダル表示時の画像の最大サイズを調整 */
+    .modal-content {
+        max-width: 98%;
+    }
+}
+.slider-container {
+    width: 100%;
+    overflow: hidden; /* はみ出た画像は見せない */
+    background: #000;
+    padding: 20px 0;
+}
+
+.slider-track {
+    display: flex;
+    width: calc(250px * 14); /* (画像の幅) × (枚数合計) */
+    animation: scroll 30s linear infinite; /* 40秒かけて一周、無限ループ */
+}
+
+.slider-track img {
+    width: 250px;
+    height: 180px;
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 2px;
+}
+
+/* 流れるアニメーションの定義 */
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-250px * 7 - 14px)); } 
+    /* (画像幅×7枚) + (余白分) だけ左へ動かす */
+}
+
+
+/* スマホでは高さを少し抑える */
+@media (max-width: 600px) {
+    .slider-track img {
+        width: 180px;
+        height: 120px;
+    }
+    @keyframes scroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(calc(-180px * 7 - 140px)); }
+    }
+}
+#loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #0d0d0d;
+    z-index: 99999; /* 全ての要素の最前面に */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease; /* 消える時のふわっとした効果 */
+}
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* vwではなく%にすることでモバイルのバー表示に対応 */
+    height: 100%; /* 同じく100%に */
+    background-color: #000000; /* 完全に黒 (#0d0d0dより濃い#000推奨) */
+    z-index: 999999; /* 他のどの要素（モーダル等）よりも大きく設定 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: visible;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+/* 読み込み完了後のクラスを修正 */
+.loaded {
+    opacity: 0;
+    visibility: hidden; /* 透明にするだけでなく、存在自体を隠す */
+}
+.loader-images {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    width: 300px; /* 見える範囲を制限 */
+}
+
+.loader-images img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    animation: loading-flow 3s infinite; /* 画像が流れる動き */
+}
+
+@keyframes loading-flow {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(-200%); opacity: 0; }
+}
+
+.loader-text {
+    color: #fff;
+    letter-spacing: 0.5em;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+/* 読み込み完了後に付与するクラス */
+.loaded {
+    opacity: 0;
+    pointer-events: none;
+}
+/* ナビゲーションボタンの共通スタイル */
+.prev-btn, .next-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 20px 15px;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 10002; /* 閉じるボタンの次くらいに高く */
+    transition: background 0.3s;
+    user-select: none;
+}
+
+.prev-btn:hover, .next-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.prev-btn { left: 10px; border-radius: 0 5px 5px 0; }
+.next-btn { right: 10px; border-radius: 5px 0 0 5px; }
+
+/* スマホではボタンを少し大きく、透明度を上げる */
+@media (max-width: 600px) {
+    .prev-btn, .next-btn {
+        padding: 15px 10px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+/* 透明なタップエリアのスタイル */
+.tap-area {
+    position: fixed;
+    top: 0;
+    width: 25%;    /* 画面の左25%と右25%をタップ領域にする */
+    height: 100%;
+    z-index: 10002;
+    cursor: pointer;
+    /* デバッグ用：位置を確認したい時は background: rgba(255,0,0,0.1) を入れる */
+}
+
+.prev-tap { left: 0; }
+.next-tap { right: 0; }
+
+/* 閉じるボタンがタップエリアに埋もれないよう z-index を調整 */
+.close {
+    z-index: 10005; 
+}
+/* --- PC向けの設定（基本設定） --- */
+.tap-area {
+    position: fixed;
+    top: 0;
+    width: 15%; /* PCでは少し狭めのクリック領域に設定 */
+    height: 100%;
+    z-index: 10002;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* ホバーした時だけ、うっすら背景を出す（PCならではの演出） */
+.tap-area:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.prev-tap { left: 0; }
+.next-tap { right: 0; }
+
+/* 矢印のデザイン */
+.arrow-icon {
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.5); /* 普段は少し薄くしておく */
+    transition: color 0.3s;
+}
+
+.tap-area:hover .arrow-icon {
+    color: #fff; /* ホバーでハッキリ表示 */
+}
+
+/* --- スマホ向けの設定（上書き） --- */
+@media (max-width: 600px) {
+    /* 矢印アイコンを完全に消す */
+    .arrow-icon {
+        display: none;
+    }
+
+    /* スマホではタップしやすさを優先して領域を広げる（25%〜30%程度） */
+    .tap-area {
+        width: 30%;
+    }
+
+    /* スマホではホバー背景も不要（タップ時に不自然に見えるため） */
+    .tap-area:hover {
+        background: transparent;
+    }
+}
+
+header h1 {
+    display: inline-block; /* アニメーションを正しく適用するために必要 */
+    font-size: 3rem;
+    font-weight: 100000;
+    letter-spacing: 0.1em;
+    color: #fff;
+    /* アニメーションの設定：4秒かけて1往復、滑らかに（ease-in-out）、無限ループ */
+    animation: towerStretch 4s ease-in-out infinite;
+    /* 伸びる基点を「下」に設定することで、地面から伸びているように見せます */
+    transform-origin: bottom; 
+}
+
+/* 上下に伸び縮みする動きの定義 */
+@keyframes towerStretch {
+    0%, 100% {
+        transform: scaleY(1); /* 通常の高さ */
+    }
+    50% {
+        transform: scaleY(1.1); /* 1.15倍に引き伸ばす */
+        filter: brightness(1.2);   /* 伸びた時に少し明るくすると、より幻想的に */
+    }
+}
+/* モーダル内の画像の上でのカーソル設定 */
+.modal-content {
+    /* url('画像パス'), auto（読み込めなかった時の予備）の順で書きます */
+    /* 32x32px 程度のサイズが、ブラウザで最も安定して表示されます */
+    cursor: url('images/ca-sol2.webp') 16 16, pointer; 
+    
+    transition: transform 0.3s ease; /* 以前のズーム用の transition は消すか調整 */
+}
+
+
+/* 左右のタップエリア（PC表示時）のカーソルも変えるとかっこいいです */
+.prev-tap {
+    cursor: url('images/ca-sol2.webp') 16 16, auto;
+}
+.next-tap {
+    cursor: url('images/ca-sol2.webp') 16 16, auto;
+}
+.click-effect {
+    position: fixed;
+    pointer-events: none;
+    /* モーダルが 99999 なら、エフェクトはそれ以上に */
+    z-index: 100000; 
+    transform: translate(-50%, -50%);
+}
+/* モーダル全体（背景の黒い部分）にカスタムカーソルを適用 */
+.modal, 
+.modal-wrapper {
+    cursor: url('images/ca-sol2.webp') 16 16, auto !important;
+}
+
+/* 左右の矢印エリア（タップエリア）にも同じカーソルを適用 */
+.tap-area {
+    cursor: url('images/ca-sol2.webp') 16 16, auto !important;
+}
+
+/* 画像の上でも引き続き適用 */
+.modal-content {
+    cursor: url('images/ca-sol2.webp') 16 16, auto !important;
+}
+
+/* 閉じるボタン（×）の上だけは、分かりやすくするために別のカーソルにするか、
+   同じカーソルを維持するか選べます。同じにする場合は以下も追加 */
+.close {
+    cursor: url('images/ca-sol2.webp') 16 16, pointer !important;
+}
+/* サイト全体に適用 */
+body {
+    cursor: url('images/ca-sol2.webp') 16 16, auto;
+}
+
+/* リンクや画像など、クリックできる要素に乗った時のカーソル */
+/* 指マークにするか、別のデザイン（cursor-hover.webpなど）にするか選べます */
+a, button, .gallery-img, .tap-area {
+    cursor: url('images/ca-sol2.webp') 16 16, pointer;
+}
+
+/* モーダル表示中も確実に適用 */
+.modal, .modal-content {
+    cursor: url('images/ca-sol2.webp') 16 16, auto !important;
+}
+/* style.css */
+img {
+    /* これを削除！ */
+    /* pointer-events: none; */ 
+
+    /* 長押しメニュー禁止は残してOK（iOSで有効） */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+header {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #000; /* 背景が黒の場合 */
+}
+
+.header-text {
+    margin-top: 20px;
+    color: #ccc; /* 少しグレーにすると上品です */
+    font-size: 0.9rem;
+    line-height: 1.6;
+    letter-spacing: 0.05em;
+    text-indent: 1em;
+}
+
+/* 初期状態：透明で少し下に配置 */
+.fade-in-text {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+    margin-top: 20px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* このクラスがつくと表示される */
+.fade-in-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.philosophy {
+    font-style: Agency FB;
+    font-size: 0.85rem;
+    margin-top: 12px;
+    letter-spacing: 0.1em;
+}
+/* style.css */
+
+/* タイトル：Chakra Petch */
+header h1 {
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.1em; /* 鉄塔の構造物のような広がりを持たせる */
+    color: #fff;
+    /* 既存のアニメーション設定... */
+}
+
+/* 序文：さわらび明朝 */
+.fade-in-text {
+    font-family: 'Sawarabi Mincho', serif;
+    font-weight: 300;
+    color: #ddd;
+    text-align: center;
+    margin-top: 40px; /* タイトルとの間隔を空ける（一段下げる） */
+}
+
+.fade-in-text p {
+    margin-bottom: 2rem; /* 段落ごとの間隔（さらに一段下げる） */
+    line-height: 2.2;    /* 行間を広くして、言葉に余白を持たせる */
+    letter-spacing: 0.1em;
+}
+
+/* 原則などの強調したい一文 */
+.philosophy {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-top: 30px;
+}
